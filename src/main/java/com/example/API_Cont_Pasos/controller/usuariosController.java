@@ -1,5 +1,6 @@
 package com.example.API_Cont_Pasos.controller;
 
+import com.example.API_Cont_Pasos.dto.ActualizarCalveDTO;
 import com.example.API_Cont_Pasos.model.usuarios;
 import com.example.API_Cont_Pasos.service.servicioUsuarios;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/usuarios")
 public class usuariosController {
     @Autowired
@@ -28,7 +30,7 @@ public class usuariosController {
         } else {
             respuesta.put("mensaje", "Credenciales incorrectas");
             respuesta.put("idUsuario", null);
-            return ResponseEntity.status(401).body(respuesta);
+            return ResponseEntity.ok(respuesta);
         }
     }
 
@@ -43,15 +45,13 @@ public class usuariosController {
     }
 
     @PostMapping("/recuperarClave")
-    public String recuperarClave(@RequestParam String correo) {
-        return usrServ.recuperarClave(correo);
+    public String recuperarClave(@RequestBody usuarios usuario) {
+        return usrServ.recuperarClave(usuario.getCorreo());
     }
 
     @PostMapping("/actualizarClave")
-    public String actualizarClave(@RequestParam String correo,
-                                  @RequestParam String claveActual,
-                                  @RequestParam String nuevaClave) {
-        return usrServ.actualizarClave(correo, claveActual, nuevaClave);
+    public String actualizarClave(@RequestBody ActualizarCalveDTO CambioClave) {
+        return usrServ.actualizarClave(CambioClave.getCorreo(), CambioClave.getClaveActual(), CambioClave.getNuevaClave());
     }
 
 

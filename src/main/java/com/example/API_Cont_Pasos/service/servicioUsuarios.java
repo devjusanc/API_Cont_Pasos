@@ -12,6 +12,7 @@ import java.util.Optional;
 public class servicioUsuarios {
     @Autowired
     private repositorioUsuario usrRep;
+    @Autowired
     private emailService mailserv;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -31,7 +32,8 @@ public class servicioUsuarios {
     }
 
     public String registrarUsuario(usuarios usuario) {
-        if (usrRep.existsByCorreo(usuario.getCorreo())) {
+        Optional<usuarios> buscarUsuario=usrRep.findByCorreo(usuario.getCorreo());
+        if (buscarUsuario.isPresent()) {
             return "El correo ya está registrado.";
         }
 

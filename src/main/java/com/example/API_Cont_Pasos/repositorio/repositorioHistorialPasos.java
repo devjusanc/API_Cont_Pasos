@@ -12,9 +12,9 @@ import java.util.List;
 
 @Repository
 public interface repositorioHistorialPasos extends JpaRepository<historialpasos, Long> {
-    @Query(value = "SELECT fecha, SUM(pasos) as totalPasos, SUM(pasos) * 0.04 as TotalCalorias FROM historialpasos WHERE Id_Usuario = :idUsuario GROUP BY fecha", nativeQuery = true)
+    @Query(value = "SELECT DATE(Fecha) as fecha, SUM(pasos) as totalPasos, SUM(pasos) * 0.04 as TotalCalorias FROM historialpasos WHERE Id_Usuario = :idUsuario GROUP BY DATE(Fecha) order by 1", nativeQuery = true)
     List<PasosPorFechaDTO> obtenerHistorialAgrupado(@Param("idUsuario") Long idUsuario);
 
-    @Query(value = "SELECT SUM(pasos) as totalPasos, SUM(pasos) * 0.04 as TotalCalorias FROM historialpasos WHERE Id_Usuario = :idUsuario  AND DATE(Fecha) = CURDATE() GROUP BY fecha", nativeQuery = true)
+    @Query(value = "SELECT SUM(pasos) as totalPasos, SUM(pasos) * 0.04 as TotalCalorias FROM historialpasos WHERE Id_Usuario = :idUsuario  AND DATE(Fecha) = CURDATE() GROUP BY DATE(Fecha)", nativeQuery = true)
     PasosHoy obtenerPasosHoy(@Param("idUsuario") Long idUsuario);
 }
